@@ -29,6 +29,6 @@
   },
   "homepage": "https://github.com/HichemTab-tech/npm-package-skeleton#readme",
   "dependencies": {
-    "prompt": "^1.3.0"
+    "prompts": "^1.3.0"
   }
 }
