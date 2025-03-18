@@ -73,6 +73,8 @@ async function run() {
 
     // Step 3: Finalize package.json before any replacements
     await finalizePackageJson(replacements);
+    await fs.rm(path.join(BASE_DIR, 'package-lock.json'), {force: true});
+    await fs.rm(path.join(BASE_DIR, 'node_modules'), {recursive: true, force: true});
 
     // Step 4: Clean unneeded lock files
     if (answers.pkgManager === 'npm') {
@@ -105,6 +107,7 @@ async function run() {
 
     // Step 8: Cleanup setup scripts and temporary files (optional)
     await fs.rm(path.join(BASE_DIR, 'scripts'), {recursive: true, force: true});
+    await fs.rm(path.join(BASE_DIR, 'stubs'), {recursive: true, force: true});
     console.log('✅ Cleaned up temporary setup files.');
 
     console.log('\n🎉 Package Setup Complete!');
