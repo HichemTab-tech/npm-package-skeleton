@@ -175,10 +175,11 @@ async function renameStubFiles(directory) {
         if (entry.isDirectory()) {
             await renameStubFiles(entryPath);
         } else if (entry.name.endsWith('.stub')) {
-            const finalPath = entryPath
-                .replace('pnpm-', '')
-                .replace('npm-', '')
-                .replace('.stub', '')
+
+
+            const fileName = path.basename(entryPath).replace('pnpm-', '').replace('npm-', '').replace('.stub', '');
+
+            const finalPath = path.join(path.dirname(entryPath), fileName)
                 .replace('\\stubs\\.github\\ISSUE_TEMPLATE', '\\.github\\ISSUE_TEMPLATE')
                 .replace('\\stubs\\.github\\workflows', '\\.github\\workflows')
                 .replace('\\stubs\\.github', '\\.github');
