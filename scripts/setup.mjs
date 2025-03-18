@@ -1,7 +1,7 @@
 import fs from 'fs/promises';
 import path from 'path';
 import prompts from 'prompts';
-import { exec } from 'child_process';
+import {exec} from 'child_process';
 
 const BASE_DIR = path.join(process.cwd());
 
@@ -10,41 +10,56 @@ async function run() {
 
     const currentYear = new Date().getFullYear();
 
-    // Step 1: Interactive prompts
-    const answers = await prompts([
-        {
-            type: 'select',
-            name: 'pkgManager',
-            message: '📦 Choose package manager:',
-            choices: [{ title: 'npm', value: 'npm' }, { title: 'pnpm', value: 'pnpm' }]
-        },
-        {
-            type: 'text',
-            name: 'packageName',
-            message: '🌟 Enter package name:'
-        },
-        {
-            type: prev => prev ? 'text' : null,
-            name: 'repoName',
-            message: '📌 Repo name (suggested):',
-            initial: prev => prev
-        },
-        {
-            type: 'text',
-            name: 'authorName',
-            message: '👤 Author Name:'
-        },
-        {
-            type: 'text',
-            name: 'authorEmail',
-            message: '📧 Author Email:'
-        },
-        {
-            type: 'text',
-            name: 'githubUsername',
-            message: '🐙 GitHub Username:'
-        }
-    ]);
+
+    /**
+     * @typedef {Object} Answers
+     * @property {'npm' | 'pnpm'} pkgManager - The selected package manager (npm or pnpm).
+     * @property {string} packageName - The name of the package provided by the user.
+     * @property {string} repoName - The repository name, suggested or provided by the user.
+     * @property {string} authorName - The name of the package author.
+     * @property {string} authorEmail - The email of the package author.
+     * @property {string} githubUsername - The GitHub username of the author.
+     */
+
+    // noinspection JSUnusedGlobalSymbols
+    /** @type {Answers} */
+        // Step 1: Interactive prompts
+    const answers = await prompts(
+        [
+            {
+                type: 'select',
+                name: 'pkgManager',
+                message: '📦 Choose package manager:',
+                choices: [{title: 'npm', value: 'npm'}, {title: 'pnpm', value: 'pnpm'}]
+            },
+            {
+                type: 'text',
+                name: 'packageName',
+                message: '🌟 Enter package name:'
+            },
+            {
+                type: prev => prev ? 'text' : null,
+                name: 'repoName',
+                message: '📌 Repo name (suggested):',
+                initial: prev => prev
+            },
+            {
+                type: 'text',
+                name: 'authorName',
+                message: '👤 Author Name:'
+            },
+            {
+                type: 'text',
+                name: 'authorEmail',
+                message: '📧 Author Email:'
+            },
+            {
+                type: 'text',
+                name: 'githubUsername',
+                message: '🐙 GitHub Username:'
+            }
+        ]
+    );
 
     // Step 2: Define global replacements clearly AFTER getting answers
     const replacements = {
@@ -61,15 +76,13 @@ async function run() {
 
     // Step 4: Clean unneeded lock files
     if (answers.pkgManager === 'npm') {
-        await fs.rm(path.join(BASE_DIR, 'pnpm-lock.yaml'), { force: true });
-        console.log('✅ Removed pnpm-lock.yaml');
+        await finalizePackageLockJson();
     } else {
-        await fs.rm(path.join(BASE_DIR, 'package-lock.json'), { force: true });
-        console.log('✅ Removed package-lock.json');
+        await finalizePnpmPackageLockYaml(replacements);
     }
 
     // Step 5: filters workflows based on selected package manager
-    const workflowDir = path.join(BASE_DIR, 'stubs', 'workflows');
+    const workflowDir = path.join(BASE_DIR, 'stubs', '.github', 'workflows');
     const workflows = await fs.readdir(workflowDir);
 
     await Promise.all(workflows.map(async (file) => {
@@ -79,6 +92,8 @@ async function run() {
         if ((answers.pkgManager === 'npm' && isPnpmWorkflow) || (answers.pkgManager === 'pnpm' && isNpmWorkflow)) {
             await fs.rm(path.join(workflowDir, file));
             console.log(`✅ Removed unwanted workflow: ${file}`);
+        } else {
+            console.log(`✅ Kept workflow: ${file}`);
         }
     }));
 
@@ -89,7 +104,7 @@ async function run() {
     await replacePlaceholders(BASE_DIR, replacements, ['node_modules', '.git']);
 
     // Step 8: Cleanup setup scripts and temporary files (optional)
-    await fs.rm(path.join(BASE_DIR, 'scripts'), { recursive: true, force: true });
+    await fs.rm(path.join(BASE_DIR, 'scripts'), {recursive: true, force: true});
     console.log('✅ Cleaned up temporary setup files.');
 
     console.log('\n🎉 Package Setup Complete!');
@@ -116,15 +131,51 @@ async function finalizePackageJson(replacements) {
     await fs.rm(stubPkgPath);
 }
 
+// helper functions clearly separated and organized
+async function finalizePackageLockJson(replacements) {
+    const stubPkgLockPath = path.join(BASE_DIR, 'stubs', 'package-lock.json.stub');
+    const finalPkgLockPath = path.join(BASE_DIR, 'package-lock.json');
+
+    let packageLockJsonContent = await fs.readFile(stubPkgLockPath, 'utf8');
+
+    for (const [key, value] of Object.entries(replacements)) {
+        packageLockJsonContent = packageLockJsonContent.replaceAll(key, value);
+    }
+
+    await fs.writeFile(finalPkgLockPath, packageLockJsonContent, 'utf8');
+    console.log('✅ Created customized package-lock.json');
+
+    // remove the stub after replacement
+    await fs.rm(stubPkgLockPath);
+}
+
+// helper functions clearly separated and organized
+async function finalizePnpmPackageLockYaml(replacements) {
+    const stubPnpmPkgLockPath = path.join(BASE_DIR, 'stubs', 'pnpm-lock.yaml.stub');
+    const finalPnpmPkgLockPath = path.join(BASE_DIR, 'pnpm-lock.yaml');
+
+    // replace inside content directly
+    let pnpmPackageLockContent = await fs.readFile(stubPnpmPkgLockPath, 'utf8');
+    for (const [key, value] of Object.entries(replacements)) {
+        pnpmPackageLockContent = pnpmPackageLockContent.replaceAll(key, value);
+    }
+
+    await fs.writeFile(finalPnpmPkgLockPath, pnpmPackageLockContent, 'utf8');
+    console.log('✅ Created customized pnpm-lock.yaml');
+
+    // remove the stub after replacement
+    await fs.rm(stubPnpmPkgLockPath);
+}
+
 async function renameStubFiles(directory) {
-    const entries = await fs.readdir(directory, { withFileTypes: true });
+    const entries = await fs.readdir(directory, {withFileTypes: true});
 
     for (const entry of entries) {
         const entryPath = path.join(directory, entry.name);
         if (entry.isDirectory()) {
             await renameStubFiles(entryPath);
         } else if (entry.name.endsWith('.stub')) {
-            const finalPath = entryPath.replace('.stub', '');
+            const finalPath = entryPath.replace('pnpm-', '').replace('npm-', '').replace('.stub', '');
             await fs.rename(entryPath, finalPath);
             console.log(`✅ Renamed stub file: ${entry.name}`);
         }
@@ -132,7 +183,7 @@ async function renameStubFiles(directory) {
 }
 
 async function replacePlaceholders(directory, replacements, excludeDirs = []) {
-    const entries = await fs.readdir(directory, { withFileTypes: true });
+    const entries = await fs.readdir(directory, {withFileTypes: true});
 
     for (const entry of entries) {
         const entryPath = path.join(directory, entry.name);
