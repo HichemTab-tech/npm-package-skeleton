@@ -76,7 +76,7 @@ async function run() {
 
     // Step 4: Clean unneeded lock files
     if (answers.pkgManager === 'npm') {
-        await finalizePackageLockJson();
+        await finalizePackageLockJson(replacements);
     } else {
         await finalizePnpmPackageLockYaml(replacements);
     }
