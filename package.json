@@ -12,7 +12,7 @@
     "package"
   ],
   "scripts": {
-    "setup": "npm install && node scripts/setup.js"
+    "setup": "npm install && node scripts/setup.mjs"
   },
   "peerDependencies": {
     "react": "^18.3.1",
