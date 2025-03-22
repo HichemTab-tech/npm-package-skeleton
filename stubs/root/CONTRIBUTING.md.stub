@@ -32,10 +32,10 @@ To start contributing to the project, follow these steps:
 1. Fork this repository on GitHub.
 2. Clone your forked repository:
 
-```sh
-git clone https://github.com/YOUR_GITHUB_USERNAME/%REPO-NAME%
-cd %REPO-NAME%
-```
+    ```sh
+    git clone https://github.com/YOUR_GITHUB_USERNAME/%REPO-NAME%
+    cd %REPO-NAME%
+    ```
 
 3. Install dependencies with your preferred package manager:
 
@@ -57,40 +57,40 @@ To submit a feature or bug fix, please:
 
 1. Create a branch from the `main` branch. Name the branch according to your feature or bug fix:
 
-```sh
-git checkout -b feature/CoolNewFeature
-```
+    ```sh
+    git checkout -b feature/CoolNewFeature
+    ```
 
-or for bug fixes:
+    or for bug fixes:
 
-```sh
-git checkout -b fix/bug-description
-```
+    ```sh
+    git checkout -b fix/bug-description
+    ```
 
 2. After making your necessary changes, run relevant checks and tests to ensure everything works correctly:
 
-```sh
-npm test
-```
+    ```sh
+    npm test
+    ```
 
-or with pnpm:
+    or with pnpm:
 
-```sh
-pnpm test
-```
+    ```sh
+    pnpm test
+    ```
 
 3. Stage and commit your changes clearly describing what has been changed:
 
-```sh
-git add .
-git commit -m 'feat: Add CoolNewFeature to improve performance'
-```
+    ```sh
+    git add .
+    git commit -m 'feat: Add CoolNewFeature to improve performance'
+    ```
 
 4. Push your branch to your forked repo:
 
-```sh
-git push origin feature/CoolNewFeature
-```
+    ```sh
+    git push origin feature/CoolNewFeature
+    ```
 
 ---
 
