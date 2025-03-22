@@ -33,6 +33,35 @@ Designed to get out of your way and let you focus on building.
 
 ---
 
+## 📦 Publishing to npm
+
+This skeleton comes with a preconfigured GitHub Action to automatically publish your package to [npmjs.com](https://www.npmjs.com/) whenever you create a GitHub release. 🎉
+
+To enable it:
+
+1. **Create an npm access token**:
+    - Go to your [npm account tokens page](https://www.npmjs.com/settings/tokens).
+    - Click **"Generate New Token"**.
+    - Choose **"Automation"** (or **"Classic" with "Publish" access** if you prefer).
+    - Copy the generated token.
+
+2. **Add the token to your GitHub repo**:
+    - Go to your repository on GitHub.
+    - Navigate to **Settings** → **Secrets and variables** → **Actions** → **New repository secret**.
+    - Name it exactly: `NODE_AUTH_TOKEN`
+    - Paste your token as the value.
+
+3. **Publish your package**:
+    - Push your changes to `main` (or your default branch).
+    - Go to the **Releases** tab on GitHub.
+    - Click **"Draft a new release"** and fill in the version/tag.
+    - Once published, the GitHub Action will automatically publish your package to npm. 🚀
+
+✅ That’s it! Now your releases will sync directly to npm with no extra steps.
+
+
+---
+
 ## ✨ What's Included
 
 - 🔁 Replaces placeholders with your custom info.
