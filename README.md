@@ -27,8 +27,9 @@ Designed to get out of your way and let you focus on building.
     - Preferred package manager (`npm` or `pnpm`)
     - etc.
 
-4. **Done!**
-   Your skeleton is now personalized, cleaned up, initialized with Git, and ready to code 🎸
+4. **Done!**  
+   Your skeleton is now personalized, cleaned up, initialized with Git, and ready to code 🎸  
+   **You can even publish to npm with a single GitHub release!**
 
 ---
 
@@ -39,6 +40,7 @@ Designed to get out of your way and let you focus on building.
 - 🔧 GitHub Workflows:
     - Auto-assign issues
     - Dependabot support
+    - ✅ **Publish to npm on GitHub release** (just create a release tag, and it’s live!)
 - 📋 GitHub repo enhancements:
     - Issue templates for structured bug reports and feature requests.
     - Pull Request templates to encourage clear and detailed contributions.
@@ -52,6 +54,7 @@ Designed to get out of your way and let you focus on building.
 Creating a new NPM package can be a chore:
 - Configure GitHub flows ✅
 - Clean project structure ✅
+- Automate publishing ✅
 
 Let this repo do all the boring stuff, so you can jump straight into the code.
 
