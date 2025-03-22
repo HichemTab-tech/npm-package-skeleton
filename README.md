@@ -9,29 +9,32 @@ Designed to get out of your way and let you focus on building.
 
 ## 🚀 Quick Start
 
-1. **Clone the repo or use the template directly**
+1. **Use the template**  
+   Click the **[Use this template](https://github.com/HichemTab-tech/npm-package-skeleton/generate)** button on the GitHub page
+   to create your own repo from this skeleton.
+
+2. **Clone your new repository**
    ```bash
-   git clone https://github.com/HichemTab-tech/npm-package-skeleton.git
-   cd npm-package-skeleton
+   git clone https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git
+   cd YOUR_REPO_NAME
    ```
 
-2. **Run the setup script**
+3. **Run the setup script**
    ```bash
+   npm install
    npm run setup
    ```
 
-3. **Answer the prompts**, and your package will be tailored to you:
-    - Package name
-    - Author info
-    - GitHub username
-    - Preferred package manager (`npm` or `pnpm`)
-    - etc.
+4. **Answer the prompts**, and your package will be tailored to you:
+   - Package name
+   - Author info
+   - GitHub username
+   - Preferred package manager (`npm` or `pnpm`)
+   - etc.
 
-4. **Done!**  
+5. **Done!**  
    Your skeleton is now personalized, cleaned up, initialized with Git, and ready to code 🎸  
    **You can even publish to npm with a single GitHub release!**
-
----
 
 ## 📦 Publishing to npm
 
