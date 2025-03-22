@@ -122,8 +122,6 @@ async function run() {
     console.log('\n🚀 All set up and ready to go! Time to unleash your creativity and start coding like a rockstar! 🎸');
 
     console.log('\n⭐ If you found this helpful, consider supporting the project by giving it a star on GitHub at https://github.com/HichemTab-tech/npm-package-skeleton and contributing! Every bit helps 😊');
-
-
 }
 
 // helper functions clearly separated and organized
@@ -188,14 +186,13 @@ async function renameStubFiles(directory) {
         if (entry.isDirectory()) {
             await renameStubFiles(entryPath);
         } else if (entry.name.endsWith('.stub')) {
-
-
             const fileName = path.basename(entryPath).replace('pnpm-', '').replace('npm-', '').replace('.stub', '');
 
             const finalPath = path.join(path.dirname(entryPath), fileName)
                 .replace('\\stubs\\.github\\ISSUE_TEMPLATE', '\\.github\\ISSUE_TEMPLATE')
                 .replace('\\stubs\\.github\\workflows', '\\.github\\workflows')
-                .replace('\\stubs\\.github', '\\.github');
+                .replace('\\stubs\\.github', '\\.github')
+                .replace('\\stubs\\root', '\\');
             await fs.rename(entryPath, finalPath);
             console.log(`✅ Renamed stub file: ${entry.name}`);
         }
