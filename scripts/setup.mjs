@@ -99,13 +99,20 @@ async function run() {
         }
     }));
 
-    // Step 6: Rename all stub files
+    // Step 6: Cleanup project specific files
+    const filesToRemove = ['LICENSE', 'README.md', 'CHANGELOG.md', 'CONTRIBUTING.md', 'CODE_OF_CONDUCT.md', 'SECURITY.md'];
+    await Promise.all(filesToRemove.map(async (file) => {
+        await fs.rm(path.join(BASE_DIR, file), {force: true});
+        console.log(`✅ Removed project specific file: ${file}`);
+    }));
+
+    // Step 7: Rename all stub files
     await renameStubFiles(path.join(BASE_DIR, 'stubs'));
 
-    // Step 7: Replace placeholders in all files
+    // Step 8: Replace placeholders in all files
     await replacePlaceholders(BASE_DIR, replacements, ['node_modules', '.git']);
 
-    // Step 8: Cleanup setup scripts and temporary files (optional)
+    // Step 9: Cleanup setup scripts and temporary files (optional)
     await fs.rm(path.join(BASE_DIR, 'scripts'), {recursive: true, force: true});
     await fs.rm(path.join(BASE_DIR, 'stubs'), {recursive: true, force: true});
     console.log('✅ Cleaned up temporary setup files.');
