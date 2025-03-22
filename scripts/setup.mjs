@@ -120,7 +120,8 @@ async function run() {
     console.log('\n🎉 Package Setup Complete!');
 
     // renaming and initializing git
-    console.log('\n🚀 Renaming directory and initializing git...');
+    console.log('\n🚀 Initializing new git...');
+    await fs.rm(path.join(BASE_DIR, '.git'), {recursive: true, force: true});
 
     exec('git init && git add . && git commit -m "Initial package setup"');
 
