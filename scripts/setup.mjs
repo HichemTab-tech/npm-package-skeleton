@@ -112,7 +112,34 @@ async function run() {
 
     console.log('\n🎉 Package Setup Complete!');
 
+    // renaming and initializing git
+    console.log('\n🚀 Renaming directory and initializing git...');
+
+    const newDirectoryName = replacements["%REPO-NAME%"]; // or any other target folder name you prefer
+    const parentDir = path.join(BASE_DIR, '..');
+    const oldDirName = path.basename(BASE_DIR);
+    const newDirPath = path.join(parentDir, newDirectoryName);
+
+    try {
+        // Rename the directory
+        await fs.rename(BASE_DIR, newDirPath);
+        console.log(`🚀 Renamed directory from ${oldDirName} to ${newDirectoryName}`);
+
+        // Navigate up to new directory
+        process.chdir(newDirPath);
+        console.log('📂 Changed working directory to:', process.cwd());
+    } catch (err) {
+        console.error('❌ Could not rename and change directory', err);
+    }
+
     exec('git init && git add . && git commit -m "Initial package setup"');
+
+    console.log('\n🎉 Git initialized and first commit done!');
+
+    console.log('\n🚀 All set up and ready to go! Time to unleash your creativity and start coding like a rockstar! 🎸');
+
+    console.log('\n⭐ If you found this helpful, consider supporting the project by giving it a star on GitHub at https://github.com/HichemTab-tech/npm-package-skeleton and contributing! Every bit helps 😊');
+
 
 }
 
