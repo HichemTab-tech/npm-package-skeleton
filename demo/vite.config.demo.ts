@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import tailwindcss from '@tailwindcss/vite';
 import { resolve } from 'path';
 
 export default defineConfig({
@@ -10,11 +11,14 @@ export default defineConfig({
     resolve: {
         alias: {
             // Allow your demo to resolve your library directly
-            '%PACKAGE-NAME%': resolve(__dirname, 'src'),
+            '%PACKAGE-NAME%': resolve(__dirname, '../src'),
         },
     },
     server: {
         port: 5021
     },
-    plugins: [react()],
+    plugins: [
+        react(),
+        tailwindcss(),
+    ],
 });
