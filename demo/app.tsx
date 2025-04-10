@@ -1,5 +1,6 @@
 import * as React from 'react';
-import {GiveHichemTabTechCredit, MyComponent} from '../dist/main.js'; // Import your built library
+//import {GiveHichemTabTechCredit, MyComponent} from '../dist/main.js'; // Import your built library
+import {GiveHichemTabTechCredit, MyComponent} from '%PACKAGE-NAME%'; // Import your dev library
 
 const App = () => {
 

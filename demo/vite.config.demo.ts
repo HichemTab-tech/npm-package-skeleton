@@ -10,7 +10,7 @@ export default defineConfig({
     resolve: {
         alias: {
             // Allow your demo to resolve your library directly
-            '%PACKAGE-NAME%': resolve(__dirname, 'dist', 'main.js'),
+            '%PACKAGE-NAME%': resolve(__dirname, 'src'),
         },
     },
     server: {
