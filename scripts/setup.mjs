@@ -14,6 +14,7 @@ async function run() {
     /**
      * @typedef {Object} Answers
      * @property {'npm' | 'pnpm'} pkgManager - The selected package manager (npm or pnpm).
+     * @property {string} displayName - The display name of the package provided by the user.
      * @property {string} packageName - The name of the package provided by the user.
      * @property {string} repoName - The repository name, suggested or provided by the user.
      * @property {string} authorName - The name of the package author.
@@ -34,8 +35,14 @@ async function run() {
             },
             {
                 type: 'text',
+                name: 'displayName',
+                message: '📝 Enter display name:',
+            },
+            {
+                type: 'text',
                 name: 'packageName',
-                message: '🌟 Enter package name:'
+                message: '🌟 Enter package name:',
+                initial: prev => prev.replace(/ /g, '-').toLowerCase()
             },
             {
                 type: prev => prev ? 'text' : null,
@@ -63,6 +70,7 @@ async function run() {
 
     // Step 2: Define global replacements clearly AFTER getting answers
     const replacements = {
+        "%DISPLAY-NAME%": answers.displayName,
         "%PACKAGE-NAME%": answers.packageName,
         "%REPO-NAME%": answers.repoName,
         "%CURRENT-YEAR%": currentYear,

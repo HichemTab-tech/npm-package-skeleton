@@ -8,7 +8,7 @@ const App = () => {
 
     return (
         <div>
-            <h1 className="text-red-600">%PACKAGE-NAME% Demo</h1>
+            <h1 className="text-red-600">%DISPLAY-NAME% Demo</h1>
             <MyComponent/>
         </div>
     );
