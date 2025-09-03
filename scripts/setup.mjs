@@ -20,6 +20,7 @@ async function run() {
      * @property {string} authorName - The name of the package author.
      * @property {string} authorEmail - The email of the package author.
      * @property {string} githubUsername - The GitHub username of the author.
+     * @property {boolean} installLatestDeps - Whether to re-install the latest dependencies.
      */
 
     // noinspection JSUnusedGlobalSymbols
@@ -64,12 +65,20 @@ async function run() {
                 type: 'text',
                 name: 'githubUsername',
                 message: '🐙 GitHub Username:'
+            },
+            {
+                type: "select",
+                name: "installLatestDeps",
+                message: "🚀 Do you want to re-install the latest dependencies ?",
+                choices: [{ title: "Yes", value: true }, { title: "No", value: false}],
+                initial: true,
             }
         ]
     );
 
     // Step 2: Define global replacements clearly AFTER getting answers
     const replacements = {
+        "%PASCALCASE-NAME%": toPascalCase(answers.displayName),
         "%DISPLAY-NAME%": answers.displayName,
         "%PACKAGE-NAME%": answers.packageName,
         "%REPO-NAME%": answers.repoName,
@@ -83,13 +92,6 @@ async function run() {
     await finalizePackageJson(replacements);
     await fs.rm(path.join(BASE_DIR, 'package-lock.json'), {force: true});
     await fs.rm(path.join(BASE_DIR, 'node_modules'), {recursive: true, force: true});
-
-    // Step 4: Clean unneeded lock files
-    if (answers.pkgManager === 'npm') {
-        await finalizePackageLockJson(replacements);
-    } else {
-        await finalizePnpmPackageLockYaml(replacements);
-    }
 
     // Step 5: filters workflows based on selected package manager
     const workflowDir = path.join(BASE_DIR, 'stubs', '.github', 'workflows');
@@ -125,6 +127,8 @@ async function run() {
     await fs.rm(path.join(BASE_DIR, 'stubs'), {recursive: true, force: true});
     console.log('✅ Cleaned up temporary setup files.');
 
+    await installLatestDeps(answers);
+
     console.log('\n🎉 Package Setup Complete!');
 
     // renaming and initializing git
@@ -155,42 +159,6 @@ async function finalizePackageJson(replacements) {
 
     // remove the stub after replacement
     await fs.rm(stubPkgPath);
-}
-
-// helper functions clearly separated and organized
-async function finalizePackageLockJson(replacements) {
-    const stubPkgLockPath = path.join(BASE_DIR, 'stubs', 'package-lock.json.stub');
-    const finalPkgLockPath = path.join(BASE_DIR, 'package-lock.json');
-
-    let packageLockJsonContent = await fs.readFile(stubPkgLockPath, 'utf8');
-
-    for (const [key, value] of Object.entries(replacements)) {
-        packageLockJsonContent = packageLockJsonContent.replaceAll(key, value);
-    }
-
-    await fs.writeFile(finalPkgLockPath, packageLockJsonContent, 'utf8');
-    console.log('✅ Created customized package-lock.json');
-
-    // remove the stub after replacement
-    await fs.rm(stubPkgLockPath);
-}
-
-// helper functions clearly separated and organized
-async function finalizePnpmPackageLockYaml(replacements) {
-    const stubPnpmPkgLockPath = path.join(BASE_DIR, 'stubs', 'pnpm-lock.yaml.stub');
-    const finalPnpmPkgLockPath = path.join(BASE_DIR, 'pnpm-lock.yaml');
-
-    // replace inside content directly
-    let pnpmPackageLockContent = await fs.readFile(stubPnpmPkgLockPath, 'utf8');
-    for (const [key, value] of Object.entries(replacements)) {
-        pnpmPackageLockContent = pnpmPackageLockContent.replaceAll(key, value);
-    }
-
-    await fs.writeFile(finalPnpmPkgLockPath, pnpmPackageLockContent, 'utf8');
-    console.log('✅ Created customized pnpm-lock.yaml');
-
-    // remove the stub after replacement
-    await fs.rm(stubPnpmPkgLockPath);
 }
 
 async function renameStubFiles(directory) {
@@ -237,6 +205,42 @@ async function replacePlaceholders(directory, replacements, excludeDirs = []) {
                 console.log(`✅ Updated placeholders in: ${entry.name}`);
             }
         }
+    }
+}
+
+function toPascalCase(str) {
+    return str
+        .split(/[\s\-]+/)
+        .filter(Boolean)
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+        .join('');
+}
+
+/**
+ * Install latest dependencies
+ * @param answers
+ */
+async function installLatestDeps(answers) {
+    if (answers.installLatestDeps) {
+        console.log("⏳ Installing latest dependencies");
+        const packageString = await fs.readFile('package.json', 'utf8');
+        const packageJson = JSON.parse(packageString);
+        // noinspection JSUnresolvedReference
+        const devDeps = Object.keys(packageJson.devDependencies??{});
+        const deps = Object.keys(packageJson.dependencies??{});
+
+        const devDepsCommand = devDeps.map(dep => `${dep}@latest`).join(' ');
+        const depsCommand = deps.map(dep => `${dep}@latest`).join(' ');
+
+        if (answers.pkgManager === 'npm') {
+            await exec(`npm install ${devDepsCommand} -D`);
+            await exec(`npm install ${depsCommand}`);
+        }
+        else{
+            await exec(`pnpm add ${devDepsCommand} -D`);
+            await exec(`pnpm add ${depsCommand}`);
+        }
+        console.log("✅ Latest dependencies installed");
     }
 }
 

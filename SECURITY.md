@@ -13,7 +13,7 @@ If you discover a security vulnerability in this project, please do **not** open
 
 Instead, report it privately by emailing:
 
-**📧 hichem.tab2002@gmail.com**
+**📧 hichem.taboukouyout@hichemtab-tech.me**
 
 We'll respond as soon as possible and work to fix the issue promptly.
 

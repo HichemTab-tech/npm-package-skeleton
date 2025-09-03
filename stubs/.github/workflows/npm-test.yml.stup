@@ -1,9 +1,14 @@
-name: Publish Package to npmjs
+name: Test
 on:
-  release:
-    types: [published]
+  push:
+    branches:
+      - master
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    branches:
+      - master
 jobs:
-  build:
+  test:
     permissions:
       contents: read
       pull-requests: write
@@ -18,16 +23,8 @@ jobs:
           node-version: '23.x'
           registry-url: 'https://registry.npmjs.org'
 
-      - name: Install pnpm
-        run: npm install -g pnpm
-
       - name: Install dependencies
-        run: pnpm install
+        run: npm install
 
-      - name: Build project
-        run: pnpm run build
-
-      - name: Publish to npm
-        run: pnpm publish --access public --no-git-checks
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
+      - name: Test project
+        run: npm run test
