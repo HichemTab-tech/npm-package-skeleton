@@ -1,7 +1,11 @@
 import fs from 'fs/promises';
 import path from 'path';
+// noinspection NpmUsedModulesInstalled
 import prompts from 'prompts';
 import {exec} from 'child_process';
+import { promisify } from 'util';
+
+const execAsync = promisify(exec);
 
 const BASE_DIR = path.join(process.cwd());
 
@@ -46,7 +50,7 @@ async function run() {
                 initial: prev => prev.replace(/ /g, '-').toLowerCase()
             },
             {
-                type: prev => prev ? 'text' : null,
+                type: 'text',
                 name: 'repoName',
                 message: '📌 Repo name (suggested):',
                 initial: prev => prev
@@ -70,8 +74,8 @@ async function run() {
                 type: "select",
                 name: "installLatestDeps",
                 message: "🚀 Do you want to re-install the latest dependencies ?",
-                choices: [{ title: "Yes", value: true }, { title: "No", value: false}],
-                initial: true,
+                choices: [{ title: "Yes", value: "true" }, { title: "No", value: "false"}],
+                initial: () => "true",
             }
         ]
     );
@@ -134,7 +138,7 @@ async function run() {
     // renaming and initializing git
     console.log('\n🚀 Initializing git...');
 
-    exec('git init && git add . && git commit -m "Initial package setup"');
+    await execAsync('git init && git add . && git commit --no-verify --no-edit -m "Initial package setup"');
 
     console.log('\n🎉 Git initialized and first commit done!');
 
@@ -221,7 +225,7 @@ function toPascalCase(str) {
  * @param answers
  */
 async function installLatestDeps(answers) {
-    if (answers.installLatestDeps) {
+    if (answers.installLatestDeps === "true") {
         console.log("⏳ Installing latest dependencies");
         const packageString = await fs.readFile('package.json', 'utf8');
         const packageJson = JSON.parse(packageString);
@@ -233,12 +237,12 @@ async function installLatestDeps(answers) {
         const depsCommand = deps.map(dep => `${dep}@latest`).join(' ');
 
         if (answers.pkgManager === 'npm') {
-            await exec(`npm install ${devDepsCommand} -D`);
-            await exec(`npm install ${depsCommand}`);
+            await execAsync(`npm install ${devDepsCommand} -D`);
+            await execAsync(`npm install ${depsCommand}`);
         }
         else{
-            await exec(`pnpm add ${devDepsCommand} -D`);
-            await exec(`pnpm add ${depsCommand}`);
+            await execAsync(`pnpm add ${devDepsCommand} -D`);
+            await execAsync(`pnpm add ${depsCommand}`);
         }
         console.log("✅ Latest dependencies installed");
     }
