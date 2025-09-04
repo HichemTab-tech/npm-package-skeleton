@@ -250,4 +250,12 @@ async function installLatestDeps(answers) {
 // Execute setup
 run().catch((error) => {
     console.error('⚠️ Setup encountered an error:', error);
+}).finally(() => {
+    // Ensure TTY is restored so Node can exit and the shell prompt returns
+    if (process.stdin && process.stdin.isTTY) {
+        try { process.stdin.setRawMode(false); } catch {}
+        process.stdin.pause();
+    }
+    // Make sure we end on a clean new line
+    process.stdout.write('\n');
 });
