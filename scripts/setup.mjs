@@ -75,7 +75,6 @@ async function run() {
                 name: "installLatestDeps",
                 message: "🚀 Do you want to re-install the latest dependencies ?",
                 choices: [{ title: "Yes", value: "true" }, { title: "No", value: "false"}],
-                initial: () => "true",
             }
         ]
     );
