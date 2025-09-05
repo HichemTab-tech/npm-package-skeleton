@@ -20,8 +20,8 @@ export default defineConfig({
     build: {
         lib: {
             entry: resolve(__dirname, 'src/index.ts'), // Library entry point
-            name: 'PASCALCASE-NAME',
-            fileName: (format: string) => `main${format === 'es' ? '' : '.min'}.js`,
+            name: '%PASCALCASE-NAME%',
+            fileName: (format: string) => `main${format === 'es' ? '.esm' : '.min'}.js`,
             formats: ['es', 'umd']
         },
         rollupOptions: {
