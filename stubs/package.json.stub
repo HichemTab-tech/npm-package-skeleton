@@ -16,7 +16,6 @@
   "module": "dist/main.esm.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "dev": "vite",
     "build": "vite build",
     "test": "vitest",
     "preview": "vite preview",
