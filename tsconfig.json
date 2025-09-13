@@ -1,22 +1,41 @@
 {
   "compilerOptions": {
-    "lib": ["DOM", "DOM.Iterable", "ES2022"],
-    "types": ["node", "vite/client"],
+    /** Base options */
+    "esModuleInterop": true,
+    "skipLibCheck": true,
     "target": "ES2022",
-    "module": "ES2022",
+    "verbatimModuleSyntax": true,
+    "allowJs": true,
+    "resolveJsonModule": true,
+    "moduleDetection": "force",
+
+    /* Strictness */
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+
+    /* we are using vite so */
     "moduleResolution": "bundler",
+    "module": "ESNext",
+    "noEmit": true,
+
+
+
+    /* Running in dom */
+    "lib": ["DOM", "DOM.Iterable", "ES2022"],
+    // otherwise just es2022
+
+    /* for a library*/
+    "declaration": true,
+
+    /* library in a monorepo */
+    "composite": true,
+    "declarationMap": true,
+
+    "types": ["node", "vite/client"],
     "jsx": "react-jsx", // Enable React JSX transformation
-    "allowJs": true, // Allow imports of JavaScript files
-    "declaration": true, // Generate `.d.ts` files
     "declarationDir": "dist", // Output directory for types
     "outDir": "dist", // Output directory for compiled files
     "emitDeclarationOnly": true,
-    "esModuleInterop": true,
-    "verbatimModuleSyntax": true,
-    "noEmit": true,
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
-    "strict": true
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
