@@ -1,6 +1,6 @@
 # %DISPLAY-NAME%
 
-A brief and clear description of your package. Explain what problem it solves and why users might find it useful.
+*A short but clear description of your package. Explain what it does, why it’s useful, and in what context it should be used.*
 
 ---
 
@@ -20,21 +20,47 @@ pnpm add %PACKAGE-NAME%
 
 ---
 
-## 📖 Usage
+## ☕ 60-Second TL;DR
 
-Show a straightforward example of how to quickly use the package:
+Show a minimal but practical example that someone can copy-paste to immediately see results:
 
 ```javascript
 import { exampleFunction } from '%PACKAGE-NAME%';
 
-exampleFunction();
+export default function Demo() {
+  const result = exampleFunction('Hello');
+  return <div>{result}</div>;
+}
+```
+
+## Usage
+
+Provide a more detailed usage example:
+
+```javascript
+import { exampleFunction } from '%PACKAGE-NAME%';
+
+function Example() {
+  // Default behavior
+  const output = exampleFunction({ name: 'Alice' });
+
+  // With a custom identifier
+  const custom = exampleFunction(42, 'myKey');
+
+  return (
+    <div>
+      <p>{output}</p>
+      <p>{custom}</p>
+    </div>
+  );
+}
 ```
 
 ---
 
-## ⚙️ API Reference
+## API Reference
 
-### 🚩 **Function `exampleFunction(args)`**
+### Function `exampleFunction(args)`
 
 Description of what this function/method does and how to use it.
 
@@ -72,15 +98,19 @@ Contributions are welcome! Feel free to:
 
 Please follow existing coding styles and clearly state your changes in the pull request.
 
----
+## ❓ FAQ
 
-## 🐞 Issues
+**Question 1**
+Answer.
+
+**Question 2**
+Answer.
+
+## Issues
 
 If you encounter any issue, please open an issue [here](https://github.com/%GITHUB-OWNER-USERNAME%/%REPO-NAME%/issues).
 
----
-
-## 📄 License
+## License
 
 Distributed under the MIT License. See [`LICENSE`](LICENSE) file for more details.
 
@@ -88,14 +118,4 @@ Distributed under the MIT License. See [`LICENSE`](LICENSE) file for more detail
 
 ---
 
-## ⭐️ Support
-
-If you found this package helpful, consider leaving a star! ⭐️
-
----
-
-## 📣 Acknowledgments
-
-Acknowledgments and thanks to:
-
-- Mention any useful inspiration, references, or external resources here if applicable.
+_If you found this package helpful, consider leaving a star! ⭐️_
