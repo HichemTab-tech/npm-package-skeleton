@@ -126,7 +126,7 @@ async function run() {
     await replacePlaceholders(BASE_DIR, replacements, ['node_modules', '.git']);
 
     // Step 9: Cleanup setup scripts and temporary files (optional)
-    await fs.rm(path.join(BASE_DIR, 'scripts'), {recursive: true, force: true});
+    await fs.rm(path.join(BASE_DIR, 'scripts', "setup.mjs"), {force: true});
     await fs.rm(path.join(BASE_DIR, 'stubs'), {recursive: true, force: true});
     console.log('✅ Cleaned up temporary setup files.');
 

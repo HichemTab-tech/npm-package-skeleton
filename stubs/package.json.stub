@@ -17,6 +17,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "vite build",
+    "bump": "node scripts/bumper.js",
     "test": "vitest",
     "preview": "vite preview",
     "dev:demo": "vite --config demo/vite.config.demo.ts",
