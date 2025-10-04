@@ -236,12 +236,12 @@ async function installLatestDeps(answers) {
         const depsCommand = deps.map(dep => `${dep}@latest`).join(' ');
 
         if (answers.pkgManager === 'npm') {
-            await execAsync(`npm install ${devDepsCommand} -D`);
-            await execAsync(`npm install ${depsCommand}`);
+            if (devDepsCommand.trim()) await execAsync(`npm install ${devDepsCommand} -D`);
+            if (depsCommand.trim()) await execAsync(`npm install ${depsCommand}`);
         }
         else{
-            await execAsync(`pnpm add ${devDepsCommand} -D`);
-            await execAsync(`pnpm add ${depsCommand}`);
+            if (devDepsCommand.trim()) await execAsync(`pnpm add ${devDepsCommand} -D`);
+            if (depsCommand.trim()) await execAsync(`pnpm add ${depsCommand}`);
         }
         console.log("✅ Latest dependencies installed");
     }
