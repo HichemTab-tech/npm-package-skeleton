@@ -8,11 +8,27 @@ import { promisify } from 'util';
 const execAsync = promisify(exec);
 
 const BASE_DIR = path.join(process.cwd());
+const HOME_DIR = process.env.USERPROFILE || process.env.HOME || require('os').homedir();
+const MEMORY_FILE = path.join(HOME_DIR, '.npm-package-skeleton-memory.json');
+
+async function loadMemory() {
+    try {
+        const data = await fs.readFile(MEMORY_FILE, 'utf8');
+        return JSON.parse(data);
+    } catch {
+        return {};
+    }
+}
+
+async function saveMemory(fields) {
+    await fs.writeFile(MEMORY_FILE, JSON.stringify(fields, null, 2), 'utf8');
+}
 
 async function run() {
     console.log('🎯 Initializing Package Setup...\n');
 
     const currentYear = new Date().getFullYear();
+    const memory = await loadMemory();
 
 
     /**
@@ -58,17 +74,20 @@ async function run() {
             {
                 type: 'text',
                 name: 'authorName',
-                message: '👤 Author Name:'
+                message: '👤 Author Name:',
+                initial: () => memory.authorName || ''
             },
             {
                 type: 'text',
                 name: 'authorEmail',
-                message: '📧 Author Email:'
+                message: '📧 Author Email:',
+                initial: () => memory.authorEmail || ''
             },
             {
                 type: 'text',
                 name: 'githubUsername',
-                message: '🐙 GitHub Username:'
+                message: '🐙 GitHub Username:',
+                initial: () => memory.githubUsername || ''
             },
             {
                 type: "select",
@@ -78,6 +97,13 @@ async function run() {
             }
         ]
     );
+
+    // Save remembered fields
+    await saveMemory({
+        authorName: answers.authorName,
+        authorEmail: answers.authorEmail,
+        githubUsername: answers.githubUsername
+    });
 
     // Step 2: Define global replacements clearly AFTER getting answers
     const replacements = {
